@@ -1,0 +1,9 @@
+1,$s/ us/\%us/
+1,$s/ sy/\%sy/
+1,$s/ ni/\%ni/
+1,$s/ id/\%id/
+1,$s/ wa/\%wa/
+1,$s/ hi/\%hi/
+1,$s/ si/\%si/
+1,$s/ st/\%st/
+1,$s/^\%//
