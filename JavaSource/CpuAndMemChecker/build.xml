@@ -7,11 +7,14 @@
 	<property name="build" location="classes"/>
 	<property name="dist" location="dist"/>
 	<property name="lib" location="lib"/>
-	<property name="project-name" value="CpuAndMemCheckerCjp"/>
+	<property name="project-name" value="CpuAndMemChecker"/>
 
 	<path id="project.class.path">
 		<fileset dir="${lib}">
 			<include name="**/*.jar"/>
+		</fileset>
+		<fileset dir="${DV_HOME}/apps/extension/lib">
+			<include name="csext.jar"/>
 		</fileset>
 	</path>
 
