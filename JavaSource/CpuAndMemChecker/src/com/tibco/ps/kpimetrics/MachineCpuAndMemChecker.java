@@ -187,7 +187,8 @@ public class MachineCpuAndMemChecker
 		Process osProcess = null;
 		String currentLine = null;
 		String[] currentLineTokens = null;
-		
+        DecimalFormat df = new DecimalFormat("#.00");
+
 		if(commandOrScript == null) {
 			commandOrScript = CPU_UTILIZATION_COMMAND_WINDOWS;
 		}
@@ -229,10 +230,15 @@ public class MachineCpuAndMemChecker
         }
         is.close();		
         int exitVal = osProcess.waitFor();
-        //System.out.println("Exit value for the OS process: " + exitVal);
-		CpuAndMemCheckerCjp.log(debug, LOG_INFO, moduleName+" : output=" + output);
         
-        return output;
+        String outputStr = df.format(output);
+        if (outputStr.isEmpty())
+        	outputStr = "-1.0";
+
+        //System.out.println("Exit value for the OS process: " + exitVal);
+		CpuAndMemCheckerCjp.log(debug, LOG_INFO, moduleName+" : output=" + outputStr);
+        
+        return new Float(outputStr);
 	}
 
 	
@@ -385,6 +391,9 @@ public class MachineCpuAndMemChecker
 
         averageCPU_Utiliz = averageCPU_Utiliz / idleCpuPercentage.size() ;
         String averageCPU_UtilizStr = df.format(averageCPU_Utiliz);
+        if (averageCPU_UtilizStr.isEmpty())
+        	averageCPU_UtilizStr = "-1.0";
+
 		CpuAndMemCheckerCjp.log(debug, LOG_INFO, moduleName+" : averageCPU_UtilizStr=" + averageCPU_UtilizStr);
         
         return new Float(averageCPU_UtilizStr); 
