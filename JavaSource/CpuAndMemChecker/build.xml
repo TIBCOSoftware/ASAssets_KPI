@@ -33,11 +33,11 @@
 		<fileset dir="${lib}">
 			<include name="**/*.jar"/>
 		</fileset>
-		<!--
+
 		<fileset dir="${DV_HOME}/apps/extension/lib">
 			<include name="csext.jar"/>
 		</fileset>
-		-->
+
 	</path>
 	<!--
 	<path id="lib.path.ref">
