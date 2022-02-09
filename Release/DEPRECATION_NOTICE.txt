@@ -1,0 +1,78 @@
+Author: Mike Tinius, TIBCO PSG Architect and KPImetrics maintainer
+
+1. 2022-02-09: Deprecation Notice: Feb 2022
+	Starting now in 2022Q100  release.
+	Deprecating the execution of storage of these 4 tables.  Real-time access will be provided instead.
+		All triggers will be defaulted to off in this release.
+		A future release will remove the related resources and drop the tables.
+		i.	METRICS_ACR_ABUOT – populated nightly by Cache_AllCustom_AccessByUserOverTime / kpimetricsTrig_19_AllCustom_AccessByUserOverTime
+			1.	Real-time view: /services/databases/ASAssets/KPImetrics/AllCustomReports/AccessByUserOvertimeRT
+			2.  Original view [/services/databases/ASAssets/KPImetrics/AllCustomReports/AccessByUserOvertime] is mapped to AccessByUserOvertimeRT
+		ii.	METRICS_ACR_AROPOT – populated nightly by Cache_AllCustom_ActiveResourcesOverPeriodOfTime / kpimetricsTrig_20_AllCustom_ActiveResourcesOverPeriodOfTime
+			1.	Real-time view: /services/databases/ASAssets/KPImetrics/AllCustomReports/ResourceAccessByUsersRT
+			2.  Original view [/services/databases/ASAssets/KPImetrics/AllCustomReports/ResourceAccessByUsers] is mapped to ResourceAccessByUsersRT
+		iii.	METRICS_ACR_RCD – populated nightly by Cache_AllCustom_ResourceCount_Details / kpimetricsTrig_21_AllCustom_ResourceCount_Details
+			1.	Real-time view: /services/databases/ASAssets/KPImetrics/AllCustomReports/ResourceCount_DetailsRT
+			2.  Original view [/services/databases/ASAssets/KPImetrics/AllCustomReports/ResourceCount_Details] is mapped to ResourceCount_DetailsRT
+		iv.	METRICS_ACR_RCT – populated nightly by Cache_AllCustom_ResourceCount_Total / kpimetricsTrig_22_AllCustom_ResourceCount_Total
+			1.	Real-time view: /services/databases/ASAssets/KPImetrics/AllCustomReports/ResourceCount_TotalRT
+			2.  Original view [/services/databases/ASAssets/KPImetrics/AllCustomReports/ResourceCount_Total] is mapped to ResourceCount_TotalRT
+
+
+2. 2022-02-09: Deprecation Notice: May 2022
+	Going forward, KPImetrics will no longer integrate with LDAP data which was "optionally" used to augment the following tables:
+		metrics_sessions_hist
+		metrics_resources_usage_hist
+		metrics_requests_hist
+		
+	Previously, if configured /KPImetrics/Customize/LDAP_PERSON was used to integrate with the /KPImetrics/Physical/Metadata/LDAP1 and LDAP2.
+	In the spirit of simplifying this already complex software offering, it has been deemed prudent and necessary to deprecate this feature.
+	After working with many customers over the years, this feature was either never configured or was too difficult to configure and maintain.
+	
+	Technically speaking, each of the 3 tables listed above contains the "user" and "domain" columns which provide a key into an organization's
+		LDAP table.  It is the position of the maintainer of KPImetrics that if a customer wants to integrate with LDAP data, they should
+		feel free to maintain their own LDAP tables and provide their own integration with that data rather than KPImetrics maintaining
+		extra logic and columns for each row of data.
+
+	By removing this feature, it will simplify the installation scripts, table structure, transformation and data transfer scripts.
+	
+	Deprecate target Date / resource impact:
+		Beginning May 2022, there will be a release that will drop tables and columns and TDV resources associated with LDAP.  The following resources will be affected:
+			MOD:  /shared/ASAssets/KPImetrics/Configuration/updateTriggers
+			MOD:  /shared/ASAssets/KPImetrics/Configuration/pMetricsEventRegistrationSubscribe
+			MOD:  /shared/ASAssets/KPImetrics/Configuration/pMetricsEventRegistrationUnsubscribe
+			MOD:  /shared/ASAssets/KPImetrics/Physical/Metadata/System/Helpers/pUpdateEventRegLog
+			MOD:  /shared/ASAssets/KPImetrics/Physical/Metadata/System/ClusterSafeCache/pCheckExceedMemoryPercentRequests
+			MOD:  /shared/ASAssets/KPImetrics/Physical/Metadata/System/ClusterSafeCache/pCheckLongRunningRequests
+			MOD:  /shared/ASAssets/KPImetrics/Physical/Metadata/System/ClusterSafeCache/Cache_AllCustom_AccessByUserOverTime
+			DEL:  /shared/ASAssets/KPImetrics/Customize/LDAP_PERSON
+			DEL:  /shared/ASAssets/KPImetrics/Business/Logical/userUsage/vLdapPerson
+			DEL:  /shared/ASAssets/KPImetrics/Business/Business/users/vLdapPerson
+			DEL:  /shared/ASAssets/KPImetrics/Application/users/vLdapPerson
+			DEL:  /services/databases/ASAssets/KPImetrics/users/vLdapPerson
+			DEL:  /shared/ASAssets/KPImetrics/Physical/Metadata/System/ClusterSafeCache/Cache_LDAP_PERSON
+			DEL:  /shared/ASAssets/KPImetrics/Physical/Metadata/System/ClusterSafeTriggers/kpimetricsTrig_03_Cache_LDAP_PERSON
+			DEL:  /shared/ASAssets/KPImetrics/Physical/Physical/Abstraction/METRICS_LDAP_PERSON
+			DEL:  /shared/ASAssets/KPImetrics/Physical/Physical/KPI_oracle/METRICS_LDAP_PERSON
+			DEL:  /shared/ASAssets/KPImetrics/Physical/Physical/KPI_sqlserver/METRICS_LDAP_PERSON
+			DEL:  /shared/ASAssets/KPImetrics/Physical/Metadata/LDAP1
+			DEL:  /shared/ASAssets/KPImetrics/Physical/Metadata/LDAP2
+			DROP: /shared/ASAssets/KPImetrics/Physical/Metadata/KPI_sqlserver*|KPI_oracle*/../../METRICS_LDAP_PERSON*
+			MOD:  /shared/ASAssets/KPImetrics_installation/DDL/Oracle/02_pqCreateDrop_KPI_Tables_oracle_metrics_collection_stage_tables_800
+			MOD:  /shared/ASAssets/KPImetrics_installation/DDL/Oracle/03_pqCreateDrop_KPI_Tables_oracle_metrics_history_tables_800
+			MOD:  /shared/ASAssets/KPImetrics_installation/DDL/Oracle/04_pqCreateDrop_KPI_Tables_oracle_kpi2_tables
+			MOD:  /shared/ASAssets/KPImetrics_installation/DDL/Oracle/06_pqCreateDrop_KPI_Plsql_oracle_data_xfer_script_800
+			MOD:  /shared/ASAssets/KPImetrics_installation/DDL/SqlServer/02_pqCreateDrop_KPI_Tables_sqlserver_metrics_collection_stage_tables_800
+			MOD:  /shared/ASAssets/KPImetrics_installation/DDL/SqlServer/03_pqCreateDrop_KPI_Tables_sqlserver_metrics_history_tables_800
+			MOD:  /shared/ASAssets/KPImetrics_installation/DDL/SqlServer/06_pqCreateDrop_KPI_Plsql_sqlserver_data_xfer_script_800
+			MOD:  /shared/ASAssets/KPImetrics_installation/DDL/SqlServer/04_pqCreateDrop_KPI_Tables_sqlserver_kpi2_tables
+			MOD:  /shared/ASAssets/KPImetrics_installation/0_mappingConstants
+			MOD:  /shared/ASAssets/KPImetrics_installation/2_Post_Installation
+			MOD:  /shared/ASAssets/KPImetrics_installation/3_Post_Upgrade
+			MOD:  /shared/ASAssets/KPImetrics_installation/Helpers/Database/Administration/Create_All_Database_Resources
+			DEL:  /shared/ASAssets/KPImetrics_installation/Helpers/Upgrade/modify_LDAP_PERSON
+			MOD:  Modify table structure and drop columns for metrics_sessions_hist|_stg, metrics_resources_usage_hist|_stg, metrics_requests_hist|_stg
+				  drop columns: userkey, domainkey, fullname, lastname, firstname, mail, employeenumber, employeeid, telephonenumber, friendlycountryname
+			MOD:  Table structure for METRICS_ACR_ABUOT, METRICS_EVENT_SUBSCRIPTION and METRICS_EVENT_REG_LOG
+
+			
