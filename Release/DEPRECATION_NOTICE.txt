@@ -3,8 +3,7 @@ Author: Mike Tinius, TIBCO PSG Architect and KPImetrics maintainer
 1. 2022-02-09: Deprecation Notice: Feb 2022
 	Starting now in 2022Q100  release.
 	Deprecating the execution of storage of these 4 tables.  Real-time access will be provided instead.
-		All triggers will be defaulted to off in this release.
-		A future release will remove the related resources and drop the tables.
+		All related triggers and resources have been removed and the tables dropped.
 		i.	METRICS_ACR_ABUOT – populated nightly by Cache_AllCustom_AccessByUserOverTime / kpimetricsTrig_19_AllCustom_AccessByUserOverTime
 			1.	Real-time view: /services/databases/ASAssets/KPImetrics/AllCustomReports/AccessByUserOvertimeRT
 			2.  Original view [/services/databases/ASAssets/KPImetrics/AllCustomReports/AccessByUserOvertime] is mapped to AccessByUserOvertimeRT
